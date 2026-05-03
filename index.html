@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="description" content="Advanced AI-Powered Directory Management System">
+    <title>AI Directory Management System | Smart Contact Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loader"></div>
+        <p>Loading Directory System...</p>
+    </div>
+
+    <button id="mobile-menu-toggle" class="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-brain"></i></div>
+                <div class="logo-text">
+                    <h2>AI Directory</h2>
+                    <p>Smart Management</p>
+                </div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-view="dashboard"><i class="fas fa-chart-line"></i><span>Dashboard</span></button>
+            <button class="nav-item" data-view="contacts"><i class="fas fa-address-book"></i><span>Contacts</span></button>
+            <button class="nav-item" data-view="add-contact"><i class="fas fa-user-plus"></i><span>Add Contact</span></button>
+            <button class="nav-item" data-view="analytics"><i class="fas fa-chart-bar"></i><span>Analytics</span></button>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="ai-status">
+                <i class="fas fa-microchip"></i>
+                <span>AI Assistant Active</span>
+                <div class="status-dot"></div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <h1 id="page-title">Dashboard</h1>
+                <p id="page-subtitle" class="page-subtitle">Welcome to your AI-powered directory system</p>
+            </div>
+            <div class="header-right">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="global-search" placeholder="Search contacts...">
+                </div>
+                <button id="refresh-data" class="btn-icon" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+            </div>
+        </header>
+
+        <div id="dashboard-view" class="view active">
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-details"><h3>Total Contacts</h3><p id="stat-total-contacts">0</p></div></div>
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-building"></i></div><div class="stat-details"><h3>Departments</h3><p id="stat-total-departments">0</p></div></div>
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-user-check"></i></div><div class="stat-details"><h3>Active Contacts</h3><p id="stat-active-contacts">0</p></div></div>
+            </div>
+            <div class="analytics-row">
+                <div class="chart-card"><div class="card-header"><h3>Department Distribution</h3></div><canvas id="dept-chart"></canvas></div>
+                <div class="chart-card"><div class="card-header"><h3>Recent Activities</h3></div><div id="activities-list" class="activities-list"></div></div>
+            </div>
+        </div>
+
+        <div id="contacts-view" class="view">
+            <div class="view-header">
+                <div class="filters"><select id="department-filter" class="filter-select"><option value="">All Departments</option></select></div>
+                <button id="refresh-contacts" class="btn-primary"><i class="fas fa-sync-alt"></i> Refresh</button>
+            </div>
+            <div id="contacts-grid" class="contacts-grid"></div>
+        </div>
+
+        <div id="add-contact-view" class="view">
+            <div class="form-container">
+                <div class="form-header"><h2>Add New Contact</h2><p>Fill in the details to add a new contact to the directory</p></div>
+                <form id="contact-form" class="advanced-form">
+                    <div class="form-row">
+                        <div class="form-group"><label>Full Name *</label><input type="text" id="contact-name" required placeholder="John Doe"></div>
+                        <div class="form-group"><label>Email Address *</label><input type="email" id="contact-email" required placeholder="john@example.com"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Phone Number *</label><input type="tel" id="contact-phone" required placeholder="+1 234 567 8900"></div>
+                        <div class="form-group"><label>Department</label><select id="contact-department"><option value="">Select Department</option></select></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Position</label><input type="text" id="contact-position" placeholder="Senior Developer"></div>
+                        <div class="form-group"><label>Company</label><input type="text" id="contact-company" placeholder="Tech Corp"></div>
+                    </div>
+                    <div class="form-group"><label>Tags</label><input type="text" id="contact-tags" placeholder="developer, manager, remote"><small>Separate tags with commas</small></div>
+                    <div class="form-group"><label>Bio</label><textarea id="contact-bio" rows="3" placeholder="Brief description about the contact..."></textarea></div>
+                    <div class="form-actions">
+                        <button type="button" id="cancel-form" class="btn-secondary">Cancel</button>
+                        <button type="submit" class="btn-primary">Add Contact</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="analytics-view" class="view">
+            <div class="analytics-header"><h2>Analytics Dashboard</h2></div>
+            <div class="analytics-card"><h3>Contact Statistics</h3><div id="analytics-stats"></div></div>
+        </div>
+    </main>
+
+    <!-- Edit Contact Modal -->
+    <div id="edit-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header"><h2>Edit Contact</h2><button id="close-edit-modal" class="modal-close"><i class="fas fa-times"></i></button></div>
+            <form id="edit-contact-form">
+                <input type="hidden" id="edit-contact-id">
+                <div class="form-row">
+                    <div class="form-group"><label>Full Name *</label><input type="text" id="edit-contact-name" required></div>
+                    <div class="form-group"><label>Email *</label><input type="email" id="edit-contact-email" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Phone *</label><input type="tel" id="edit-contact-phone" required></div>
+                    <div class="form-group"><label>Department</label><select id="edit-contact-department"><option value="">Select Department</option></select></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Position</label><input type="text" id="edit-contact-position"></div>
+                    <div class="form-group"><label>Company</label><input type="text" id="edit-contact-company"></div>
+                </div>
+                <div class="form-group"><label>Tags</label><input type="text" id="edit-contact-tags"><small>Separate tags with commas</small></div>
+                <div class="form-group"><label>Bio</label><textarea id="edit-contact-bio" rows="3"></textarea></div>
+                <div class="form-actions">
+                    <button type="button" id="cancel-edit" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- AI Chatbot Widget -->
+    <div id="chatbot-widget" class="chatbot-widget">
+        <div class="chatbot-header" id="chatbot-toggle">
+            <div class="chatbot-icon"><i class="fas fa-robot"></i><span class="pulse"></span></div>
+            <div class="chatbot-info"><h4>AI Assistant</h4><p>Online &#8226; Ready to help</p></div>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="chatbot-container" id="chatbot-container" style="display:none;">
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot">
+                    <div class="message-avatar"><i class="fas fa-robot"></i></div>
+                    <div class="message-content"><p>Hello! I'm your AI assistant. &#x1F44B;<br>I can help you search contacts, get statistics, or answer questions.</p></div>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" id="chat-input" placeholder="Type your message...">
+                <button id="chat-send" class="btn-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
